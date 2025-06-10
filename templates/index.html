@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لعبة Anagrams</title>
+  <style>
+    .letter-btn { margin: 3px; padding: 8px 12px; }
+    #answer-display { 
+      font-weight: bold; 
+      direction: rtl; 
+      display: inline-block;
+      min-height: 1.2em;
+      border-bottom: 1px solid #333;
+      padding: 4px;
+    }
+    .control-btn {
+      margin: 5px 3px;
+      padding: 6px 10px;
+      background: #eee;
+      border: 1px solid #999;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>لعبة Anagrams</h1>
+  <p>آية: <strong>{{ reference }}</strong></p>
+
+  <div id="letters">
+    {% for letter in scrambled_list %}
+      <button type="button"
+              class="letter-btn"
+              onclick="selectLetter(this)">{{ letter }}</button>
+    {% endfor %}
+  </div>
+
+  <div id="controls">
+    <button type="button" class="control-btn" onclick="addSpace()">مسافة</button>
+    <button type="button" class="control-btn" onclick="deleteLetter()">حذف</button>
+  </div>
+
+  <p>إجابتك: <span id="answer-display"></span></p>
+
+  <form method="post" action="/check">
+    <input type="hidden" name="answer" id="answer-input">
+    <input type="hidden" name="original" value="{{ phrase }}">
+    <input type="hidden" name="reference" value="{{ reference }}">
+    <button type="submit">تحقق</button>
+  </form>
+
+  <script>
+    // مصفوفة لحفظ الأزرار التي اخترناها بالترتيب
+    const selectedButtons = [];
+
+    function selectLetter(btn) {
+      const letter = btn.textContent.trim();
+      const display = document.getElementById('answer-display');
+      display.textContent += letter;
+      document.getElementById('answer-input').value = display.textContent;
+      btn.disabled = true;
+      selectedButtons.push(btn);
+    }
+
+    function deleteLetter() {
+      const display = document.getElementById('answer-display');
+      const current = display.textContent;
+      if (!current) return;
+      // نحذف آخر حرف
+      display.textContent = current.slice(0, -1);
+      document.getElementById('answer-input').value = display.textContent;
+      // نعيد تفعيل آخر زر اخترناه
+      const btn = selectedButtons.pop();
+      if (btn) btn.disabled = false;
+    }
+
+    function addSpace() {
+      const display = document.getElementById('answer-display');
+      display.textContent += ' ';
+      document.getElementById('answer-input').value = display.textContent;
+    }
+  </script>
+</body>
+</html>

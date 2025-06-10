@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>النتيجة</title>
+</head>
+<body>
+  <h1>لعبة Anagrams</h1>
+  <p>آية: <strong>{{ reference }}</strong></p>
+
+  {% if correct %}
+    <p>أحسنت! الإجابة صحيحة: {{ original }}</p>
+  {% else %}
+    <p>للأسف، الإجابة خاطئة. الجملة الصحيحة: {{ original }}</p>
+  {% endif %}
+
+  <a href="/">جولة جديدة</a>
+</body>
+</html>
